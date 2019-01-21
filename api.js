@@ -1,3 +1,8 @@
+// Prometeus api Client side javascript
+// By Pierre-Etienne ALBINET
+// Started 20190117
+// Changed 20190121
+
 function citm(id, parent, type, name) {
   var text = 'Pwet'
   console.log(text)
@@ -12,9 +17,8 @@ function citm(id, parent, type, name) {
 
 function ritm(id, parent, type, name) {
   var itm = 0
-  console.log(text)
   var xhr = new XMLHttpRequest()
-  xhr.open('GET', 'api.py?itm=' + itm, true)
+  xhr.open('GET', 'ritm?itm=' + itm, true)
   xhr.responseType = 'JSON'
   xhr.onload = function(e) {
     var arrOfStrings = JSON.parse(xhr.response)
