@@ -7,18 +7,24 @@ import pymongo
 import urllib
 import datetime
 
+# Database connection
 def dbc():
     uri = 'mongodb+srv://4:' + urllib.parse.quote_plus('J*6FC2968!&pi@4!2Mpq') + '@prometeus-dkhuk.azure.mongodb.net/test?retryWrites=true'
     client = pymongo.MongoClient(uri)
     return client.prom
 
+# Read Item
 def ritm(itmno):
     db = dbc()
     itm = db.itm
-    q = { 'id': 0}
-    res = itm.find(q, { '_id': 0})
-    return res[0]
+    q = {'id': itmno}
+    try:
+        res = itm.find(q, { '_id': 0})
+        return res[0]
+    except IndexError:
+        return "{'error': 'not found'}"
 
+# Create Item
 def citm(id, prt, typ, nam):
     db = dbc()
     itm = db.itm
@@ -30,5 +36,5 @@ def citm(id, prt, typ, nam):
     res = itm.insert_one(newItem)
     return("{'Result': " + format(res.inserted_id) + "}")
 
-# print(ritm(0))
+# print(ritm(1))
 # print(citm(0, 0, 'void', 'void'))

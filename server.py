@@ -23,16 +23,16 @@ class Handler(BaseHTTPRequestHandler):
             response = f.read()
             f.close()
             mimetype = 'text/html'
-        elif self.path == '/api.js':
-            f = open(path + sep + 'api.js', 'rb')
-            response = f.read()
-            f.close()
-            mimetype = 'application/javascript'
         elif self.path == '/style.css':
             f = open(path + sep + 'style.css', 'rb')
             response = f.read()
             f.close()
             mimetype = 'text/css'
+        elif self.path.endswith('.js'):
+            f = open(path + sep + self.path, 'rb')
+            response = f.read()
+            f.close()
+            mimetype = 'application/javascript'
         elif self.path.endswith('.png'):
             f = open(path + sep + self.path, 'rb')
             response = f.read()
@@ -40,9 +40,10 @@ class Handler(BaseHTTPRequestHandler):
             mimetype = 'image/png'
         elif self.path[:5] == '/ritm':
             params = urllib.parse.parse_qs(self.path[6:])
-            itm = (params['itm'][0])
+            itm = int(params['itm'][0])
             response = json.dumps(api.ritm(itm)).encode('utf-8')
             mimetype = 'application/json'
+
         self.send_response(200)
         self.send_header('Content-type', mimetype)
         self.end_headers()
@@ -53,7 +54,6 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'application/json')
         self.end_headers()
         self.wfile.write(json.dumps({'Pwet': 'Pwet', 'Tagada': 'Tsoin Tsoin'}).encode('utf-8'))
-
 
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
