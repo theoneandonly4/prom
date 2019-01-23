@@ -14,10 +14,30 @@ def dbc():
     return client.prom
 
 # Read Item
-def ritm(itmno):
+def ritm(id):
     db = dbc()
     itm = db.itm
-    q = {'id': itmno}
+    q = {'id': id}
+    try:
+        res = itm.find(q, { '_id': 0})
+        return res[0]
+    except IndexError:
+        return "{'error': 'not found'}"
+
+# Find Items
+def fitm(id, prt, typ, val):
+    db = dbc()
+    itm = db.itm
+    q = {}
+    if (id != '*'):
+        q['id'] = id
+    if (prt != '*'):
+        q['prt'] = prt
+    if (typ != '*'):
+        q['typ'] = typ
+    if (val != '*'):
+        q['val'] = val
+    print(q)
     try:
         res = itm.find(q, { '_id': 0})
         return res[0]
@@ -25,16 +45,18 @@ def ritm(itmno):
         return "{'error': 'not found'}"
 
 # Create Item
-def citm(id, prt, typ, nam):
+def citm(id, prt, typ, val, cry):
     db = dbc()
     itm = db.itm
     newItem = { "id": id,
             "parent": prt,
             "type": typ,
-            "name": nam,
+            "value": val,
+            "crypt": cry
             }
     res = itm.insert_one(newItem)
     return("{'Result': " + format(res.inserted_id) + "}")
 
 # print(ritm(1))
 # print(citm(0, 0, 'void', 'void'))
+print(fitm(0, '*', '*', '*'))

@@ -55,6 +55,15 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({'Pwet': 'Pwet', 'Tagada': 'Tsoin Tsoin'}).encode('utf-8'))
 
+def init():
+    try:
+        db = api.dbc()
+        cfg = 
+
+        return 0
+    except Timeout:
+        return 'Error: no Database Connection'
+
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
 
