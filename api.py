@@ -13,19 +13,21 @@ def dbc():
     client = pymongo.MongoClient(uri)
     return client.prom
 
-# Read Item
-def ritm(id):
+# Create Item
+def citm(id, prt, typ, val, cry):
     db = dbc()
     itm = db.itm
-    q = {'id': id}
-    try:
-        res = itm.find(q, { '_id': 0})
-        return res[0]
-    except IndexError:
-        return "{'error': 'not found'}"
+    newItem = { "id": id,
+    "prt": prt,
+    "typ": typ,
+    "val": val,
+    "cry": cry
+    }
+    res = itm.insert_one(newItem)
+    return {'Result': format(res.inserted_id)}
 
-# Find Items
-def fitm(id, prt, typ, val):
+# Read Item
+def ritm(id, prt, typ, val):
     db = dbc()
     itm = db.itm
     q = {}
@@ -42,21 +44,27 @@ def fitm(id, prt, typ, val):
         res = itm.find(q, { '_id': 0})
         return res[0]
     except IndexError:
-        return "{'error': 'not found'}"
+        return {'error': 'not found'}
 
-# Create Item
-def citm(id, prt, typ, val, cry):
+# Read Item
+def ditm(id, prt, typ, val):
     db = dbc()
     itm = db.itm
-    newItem = { "id": id,
-            "parent": prt,
-            "type": typ,
-            "value": val,
-            "crypt": cry
-            }
-    res = itm.insert_one(newItem)
-    return("{'Result': " + format(res.inserted_id) + "}")
+    q = {}
+    if (id != '*'):
+        q['id'] = id
+    if (prt != '*'):
+        q['prt'] = prt
+    if (typ != '*'):
+        q['typ'] = typ
+    if (val != '*'):
+        q['val'] = val
+    try:
+        res = db.itm.delete_one(q)
+        return {'deletedCount': str(res.deleted_count)}
+    except IndexError:
+        return {'error': 'not found'}
 
 # print(ritm(1))
 # print(citm(0, 0, 'void', 'void'))
-print(fitm(0, '*', '*', '*'))
+# print(fitm('*', 0, '*', '*'))

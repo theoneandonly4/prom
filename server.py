@@ -1,7 +1,7 @@
 # Prometeus Python Server & routing
 # By Pierre-Etienne ALBINET
 # Started 20190117
-# Changed 20190121
+# Changed 20190124
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
@@ -10,8 +10,10 @@ from os import curdir, sep
 import json
 import urllib
 import api
+import sys
 #import ssl
 
+version = '0.0.1'
 path = os.path.abspath(curdir)
 hostName = 'localhost'
 hostPort = 4443
@@ -40,8 +42,8 @@ class Handler(BaseHTTPRequestHandler):
             mimetype = 'image/png'
         elif self.path[:5] == '/ritm':
             params = urllib.parse.parse_qs(self.path[6:])
-            itm = int(params['itm'][0])
-            response = json.dumps(api.ritm(itm)).encode('utf-8')
+            id = int(params['id'][0])
+            response = json.dumps(api.ritm(id, '*', '*', '*')).encode('utf-8')
             mimetype = 'application/json'
 
         self.send_response(200)
@@ -56,14 +58,11 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps({'Pwet': 'Pwet', 'Tagada': 'Tsoin Tsoin'}).encode('utf-8'))
 
 def init():
-    try:
-        db = api.dbc()
-        cfg = 
-
+    cfg = api.ritm('*', 0, 'cfg', 'promCFG')
+    if(cfg['error'] == 'not found'):
         return 0
-    except Timeout:
-        return 'Error: no Database Connection'
 
+init()
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
 
