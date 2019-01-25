@@ -1,7 +1,7 @@
 # Prometeus Python Server & routing
 # By Pierre-Etienne ALBINET
 # Started 20190117
-# Changed 20190124
+# Changed 20190125
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
@@ -11,6 +11,7 @@ import json
 import urllib
 import api
 import sys
+import html
 #import ssl
 
 version = '0.0.1'
@@ -42,7 +43,7 @@ class Handler(BaseHTTPRequestHandler):
             mimetype = 'image/png'
         elif self.path[:5] == '/ritm':
             params = urllib.parse.parse_qs(self.path[6:])
-            id = int(params['id'][0])
+            id = html.escape(int(params['id'][0]))
             response = json.dumps(api.ritm(id, '*', '*', '*')).encode('utf-8')
             mimetype = 'application/json'
 

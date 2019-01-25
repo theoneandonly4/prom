@@ -6,6 +6,7 @@
 import pymongo
 import urllib
 import datetime
+from bson.objectid import ObjectId
 
 # Database connection
 def dbc():
@@ -14,10 +15,17 @@ def dbc():
     return client.prom
 
 # Create Item
-def citm(id, prt, typ, val, cry):
+def citm(prt, typ, val, cry):
     db = dbc()
     itm = db.itm
-    newItem = { "id": id,
+
+    # Remove htmlspecialchars from all vars, escape other chars '{()}'
+
+    # Add check on 'prt' value, must be an existing '_id' in db
+    # Add check on 'typ' value, must be in a predefined list of values, exclude 'cfg' from list, only created by server
+    # Add check on 'cry' value, must be 0 or 1
+
+    newItem = {
     "prt": prt,
     "typ": typ,
     "val": val,
@@ -30,9 +38,12 @@ def citm(id, prt, typ, val, cry):
 def ritm(id, prt, typ, val):
     db = dbc()
     itm = db.itm
+
+    # Remove htmlspecialchars from all vars, escape other chars '{()}'
+
     q = {}
     if (id != '*'):
-        q['id'] = id
+        q['_id'] = id
     if (prt != '*'):
         q['prt'] = prt
     if (typ != '*'):
@@ -41,18 +52,24 @@ def ritm(id, prt, typ, val):
         q['val'] = val
     print(q)
     try:
-        res = itm.find(q, { '_id': 0})
-        return res[0]
+        res = itm.find(q)
+        t = []
+        for x in res:
+            t.append(x)
+        return t
     except IndexError:
         return {'error': 'not found'}
 
-# Read Item
+# Delete Item
 def ditm(id, prt, typ, val):
     db = dbc()
     itm = db.itm
+
+    # Remove htmlspecialchars from all vars, escape other chars '{()}'
+    
     q = {}
     if (id != '*'):
-        q['id'] = id
+        q['_id'] = id
     if (prt != '*'):
         q['prt'] = prt
     if (typ != '*'):
