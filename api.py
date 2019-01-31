@@ -18,21 +18,39 @@ def dbc():
 def citm(prt, typ, val, cry):
     db = dbc()
     itm = db.itm
+    err = {}
 
-    # Remove htmlspecialchars from all vars, escape other chars '{()}'
+    # Remove htmlspecialchars from all vars, escape other chars '{()}' > Done in server.py
 
-    # Add check on 'prt' value, must be an existing '_id' in db
-    # Add check on 'typ' value, must be in a predefined list of values, exclude 'cfg' from list, only created by server
-    # Add check on 'cry' value, must be 0 or 1
+    # Check on 'prt' value, must be an existing '_id' in db
+    prtItm = ritm(prt, '*', '*', '*')
+    if (not prtItm) and (not prt == 0):
+        err['error'] = True
+        err['prtError'] = 'The specified Parent item (' + prt + ') does not exist'
 
-    newItem = {
-    "prt": prt,
-    "typ": typ,
-    "val": val,
-    "cry": cry
-    }
-    res = itm.insert_one(newItem)
-    return {'Result': format(res.inserted_id)}
+    # Check on 'typ' value, must be in a predefined list of values, exclude 'cfg' from list, only created by server
+    #TODO change to all values of tmplt with prt = 0 + tmplt, datyp & value
+    types = ['tmplt', 'orgzt', 'prson', 'systm', 'objct', 'datyp', 'value']
+    if not typ in types:
+        err['error'] = True
+        err['typError'] = 'The specified type (' + typ + ') is not valid'
+
+    # Check on 'cry' value, must be 0 or 1
+    if (not cry == 0) and (not cry == 1):
+        err['error'] = True
+        err['cryError'] = 'The specified crypt (' + cry +') is not valid'
+
+    if not err:
+        newItem = {
+        "prt": prt,
+        "typ": typ,
+        "val": val,
+        "cry": cry
+        }
+        res = itm.insert_one(newItem)
+        return {'result': format(res.inserted_id)}
+    else:
+        return err
 
 # Read Item
 def ritm(id, prt, typ, val):
@@ -66,7 +84,7 @@ def ditm(id, prt, typ, val):
     itm = db.itm
 
     # Remove htmlspecialchars from all vars, escape other chars '{()}'
-    
+
     q = {}
     if (id != '*'):
         q['_id'] = id
