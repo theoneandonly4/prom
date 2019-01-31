@@ -18,15 +18,34 @@ Changed 20190121
 
 <body>
 
-<div id="main">
-  <button type="button" name="create Item" onclick="ritm()">Read</button>
-</div>
+  <div id="topbar">
+     <span> <a href="/">Prometeus</a> </span>
+     <span id="status"></span>
+     <span id="logout" type="button" onclick="logout()" style="display: none">Logout</span>
+   </div>
 
-<script src="./lib/prom.js" charset="utf-8"></script>
+   <div id="main">
+
+     <div id="login" style="display: none">
+       <label for="user">User: </label><input id="user" type="text" name="user"><span id=userError><br />
+       <label for="pass">Pass: </label><input id="pass" type="password" name="pass"><span id=passError><br />
+       <button type="button" onclick="login()">Log In</button><button type="button" onclick="signin()">Sign In</button>
+     </div>
+
+         <button id="test" type="button" onclick="citm(0, 'test', 'test', 'test')" style="display: block">test</button>
+
+
+     <div id="content">
+     </div>
+
+   </div>
+
+<script src="./lib/api.js" charset="utf-8"></script>
 <script src="./lib/checkFunctions.js" charset="utf-8"></script>
 <script src="./lib/cookies.js" charset="utf-8"></script>
 <script src="./lib/crypt.js" charset="utf-8"></script>
-<script src="./lib/api.js" charset="utf-8"></script>
+<script src="./lib/page.js" charset="utf-8"></script>
+<script src="./lib/prom.js" charset="utf-8"></script>
 </body>
 
 </html>

@@ -53,17 +53,17 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(response)
 
     def do_POST(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        self.wfile.write(json.dumps({'Pwet': 'Pwet', 'Tagada': 'Tsoin Tsoin'}).encode('utf-8'))
+        if self.path[:5] == '/ritm':
+            print(self.headers)
+        #     response = json.dumps(api.ritm(id, '*', '*', '*')).encode('utf-8')
+        #     mimetype = 'application/json'
+        # self.send_response(200)
+        # self.send_header('Content-type', mimetype)
+        # self.end_headers()
+        # self.wfile.write(response)
 
-def init():
-    cfg = api.ritm('*', 0, 'cfg', 'promCFG')
-    if(cfg['error'] == 'not found'):
-        return 0
+#TODO Define server initialisation - creatio of cfg with parent 0 and version.
 
-init()
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
 
