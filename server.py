@@ -41,11 +41,19 @@ class Handler(BaseHTTPRequestHandler):
             response = f.read()
             f.close()
             mimetype = 'image/png'
+        # elif self.path.endswith('.ico'):
+        #     f = open(path + sep + self.path, 'rb')
+        #     response = f.read()
+        #     f.close()
+        #     mimetype = 'image/ico'
         elif self.path[:5] == '/ritm':
             params = urllib.parse.parse_qs(self.path[6:])
             id = html.escape(int(params['id'][0]))
             response = json.dumps(api.ritm(id, '*', '*', '*')).encode('utf-8')
             mimetype = 'application/json'
+        else:
+            self.send_error(404)
+            return
 
         self.send_response(200)
         self.send_header('Content-type', mimetype)
@@ -53,16 +61,20 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(response)
 
     def do_POST(self):
-        if self.path[:5] == '/ritm':
-            print(self.headers)
-        #     response = json.dumps(api.ritm(id, '*', '*', '*')).encode('utf-8')
-        #     mimetype = 'application/json'
-        # self.send_response(200)
-        # self.send_header('Content-type', mimetype)
-        # self.end_headers()
-        # self.wfile.write(response)
+        if self.path[:5] == '/citm':
+            data = urllib.parse.parse_qs(self.rfile.read(int(self.headers.get('content-length'))).decode('utf-8'))
+            prt = html.escape(data['prt'][0])
+            typ = html.escape(data['typ'][0])
+            val = html.escape(data['val'][0])
+            cry = html.escape(data['cry'][0])
+            response = json.dumps(api.citm(prt, typ, val, cry)).encode('utf-8')
+            mimetype = 'application/json'
+        self.send_response(200)
+        self.send_header('Content-type', mimetype)
+        self.end_headers()
+        self.wfile.write(response)
 
-#TODO Define server initialisation - creatio of cfg with parent 0 and version.
+#TODO Define server initialisation - creation of cfg with parent 0 and version if it does not exist.
 
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
