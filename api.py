@@ -15,7 +15,7 @@ def dbc():
     return client.prom
 
 # Create Item
-def citm(prt, typ, val, cry):
+def citm(prt, typ, val, cry, source):
     db = dbc()
     itm = db.itm
     err = {}
@@ -31,6 +31,9 @@ def citm(prt, typ, val, cry):
     # Check on 'typ' value, must be in a predefined list of values, exclude 'cfg' from list, only created by server
     #TODO change to all values of tmplt with prt = 0 + tmplt, datyp & value
     types = ['tmplt', 'orgzt', 'prson', 'systm', 'objct', 'datyp', 'value']
+    if source == 'server':
+        types.append('cfg')
+        types.append('tmplt')
     if not typ in types:
         err['error'] = True
         err['typError'] = 'The specified type (' + typ + ') is not valid'
@@ -68,7 +71,6 @@ def ritm(id, prt, typ, val):
         q['typ'] = typ
     if (val != '*'):
         q['val'] = val
-    print(q)
     try:
         res = itm.find(q)
         t = []
@@ -78,10 +80,10 @@ def ritm(id, prt, typ, val):
                 x['prt'] = str(x['prt'])
             t.append(x)
         if not t:
-            t = {'error': 'not found'}
+            t = [{'_id': 'not found'}]
         return t
     except IndexError:
-        return {'error': 'not found'}
+        return [{'_id': 'not found'}]
 
 # Delete Item
 def ditm(id, prt, typ, val):

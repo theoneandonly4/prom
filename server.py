@@ -76,7 +76,7 @@ class Handler(BaseHTTPRequestHandler):
             typ = html.escape(data['typ'][0])
             val = html.escape(data['val'][0])
             cry = html.escape(data['cry'][0])
-            response = json.dumps(api.citm(prt, typ, val, cry)).encode('utf-8')
+            response = json.dumps(api.citm(prt, typ, val, cry, 'client')).encode('utf-8')
             mimetype = 'application/json'
         self.send_response(200)
         self.send_header('Content-type', mimetype)
@@ -85,7 +85,7 @@ class Handler(BaseHTTPRequestHandler):
 
 #TODO Define server initialiZation - creation of cfg with parent 0, templates for orgzt, prson, systm and objct. And version if it does not exist.
 
-
+init.checks()
 
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
