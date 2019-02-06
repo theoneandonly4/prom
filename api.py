@@ -73,7 +73,12 @@ def ritm(id, prt, typ, val):
         res = itm.find(q)
         t = []
         for x in res:
+            x['_id'] = str(x['_id'])
+            if not x['prt'] == 0:
+                x['prt'] = str(x['prt'])
             t.append(x)
+        if not t:
+            t = {'error': 'not found'}
         return t
     except IndexError:
         return {'error': 'not found'}
@@ -99,7 +104,3 @@ def ditm(id, prt, typ, val):
         return {'deletedCount': str(res.deleted_count)}
     except IndexError:
         return {'error': 'not found'}
-
-# print(ritm(1))
-# print(citm(0, 0, 'void', 'void'))
-# print(fitm('*', 0, '*', '*'))

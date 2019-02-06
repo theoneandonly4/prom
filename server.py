@@ -1,18 +1,22 @@
 # Prometeus Python Server & routing
 # By Pierre-Etienne ALBINET
 # Started 20190117
-# Changed 20190125
+# Changed 20190206
 
+# Import from Python
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 import os
 from os import curdir, sep
 import json
 import urllib
-import api
 import sys
 import html
 #import ssl
+
+# Import own
+import api
+import init
 
 version = '0.0.1'
 path = os.path.abspath(curdir)
@@ -47,9 +51,14 @@ class Handler(BaseHTTPRequestHandler):
         #     f.close()
         #     mimetype = 'image/ico'
         elif self.path[:5] == '/ritm':
-            params = urllib.parse.parse_qs(self.path[6:])
-            id = html.escape(int(params['id'][0]))
-            response = json.dumps(api.ritm(id, '*', '*', '*')).encode('utf-8')
+            data = urllib.parse.parse_qs(self.path[6:])
+            id = html.escape(data['id'][0])
+            prt = html.escape(data['prt'][0])
+            if prt == '0':
+                prt = 0
+            typ = html.escape(data['typ'][0])
+            val = html.escape(data['val'][0])
+            response = json.dumps(api.ritm(id, prt, typ, val)).encode('utf-8')
             mimetype = 'application/json'
         else:
             self.send_error(404)
@@ -74,7 +83,9 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response)
 
-#TODO Define server initialisation - creation of cfg with parent 0 and version if it does not exist.
+#TODO Define server initialiZation - creation of cfg with parent 0, templates for orgzt, prson, systm and objct. And version if it does not exist.
+
+
 
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))
