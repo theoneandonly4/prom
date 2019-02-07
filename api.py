@@ -33,6 +33,7 @@ def citm(prt, typ, val, cry, source):
     types = ['tmplt', 'orgzt', 'prson', 'systm', 'objct', 'datyp', 'value']
     if source == 'server':
         types.append('cfg')
+        types.append('adm')
         types.append('tmplt')
     if not typ in types:
         err['error'] = True
