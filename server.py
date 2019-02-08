@@ -78,10 +78,24 @@ class Handler(BaseHTTPRequestHandler):
             cry = html.escape(data['cry'][0])
             response = json.dumps(api.citm(prt, typ, val, cry, 'client')).encode('utf-8')
             mimetype = 'application/json'
+        elif self.path[:5] == '/uitm':
+            data = urllib.parse.parse_qs(self.rfile.read(int(self.headers.get('content-length'))).decode('utf-8'))
+            id = html.escape(data['id'][0])
+            prt = html.escape(data['prt'][0])
+            typ = html.escape(data['typ'][0])
+            val = html.escape(data['val'][0])
+            cry = html.escape(data['cry'][0])
+            response = json.dumps(api.uitm(id, prt, typ, val, cry, 'client')).encode('utf-8')
+            mimetype = 'application/json'
+        else:
+            self.send_error(404)
+            return
+
         self.send_response(200)
         self.send_header('Content-type', mimetype)
         self.end_headers()
         self.wfile.write(response)
+
 
 #TODO Define server initialiZation - creation of cfg with parent 0, templates for orgzt, prson, systm and objct. And version if it does not exist.
 

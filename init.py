@@ -48,7 +48,7 @@ def checks():
     if adm[0]['_id'] == 'not found':
         admPsn = api.citm(ObjectId(tmpIds['prson']), 'prson', 'Admin', 0, 'server')['result']
         print('Admin Created')
-        admId = api.citm(0, 'adm', 'promADM', 0, 'server')['result']
+        admId = api.citm(ObjectId(admPsn), 'adm', 'promADM', 0, 'server')['result']
         print('Admin Rights created')
     else:
         admId = adm[0]['_id']

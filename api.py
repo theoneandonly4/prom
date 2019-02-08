@@ -56,6 +56,68 @@ def citm(prt, typ, val, cry, source):
     else:
         return err
 
+# Update Item
+def uitm(id, prt, typ, val, cry, source):
+    db = dbc()
+    itm = db.itm
+    err = {}
+
+    # Remove htmlspecialchars from all vars, escape other chars '{()}' > Done in server.py
+
+    q = {}
+    if (id != '*'):
+        q['_id'] = id
+    if (prt != '*'):
+        q['prt'] = prt
+    if (typ != '*'):
+        q['typ'] = typ
+    if (val != '*'):
+        q['val'] = val
+
+    print(q)
+    # CHeck if the provided id exists
+    Itm = ritm(id, '*', '*', '*')
+    if (not Itm):
+        err['error'] = True
+        err['prtError'] = 'The specified item (' + prt + ') does not exist'
+
+    # Check on 'prt' value, must be an existing '_id' in db
+    prtItm = ritm(prt, '*', '*', '*')
+    if (not prtItm) and (not prt == 0):
+        err['error'] = True
+        err['prtError'] = 'The specified Parent item (' + prt + ') does not exist'
+
+    # Check on 'typ' value, must be in a predefined list of values, exclude 'cfg' from list, only created by server
+    #TODO change to all values of tmplt with prt = 0 + tmplt, datyp & value
+    types = ['tmplt', 'orgzt', 'prson', 'systm', 'objct', 'datyp', 'value']
+    if source == 'server':
+        types.append('cfg')
+        types.append('adm')
+        types.append('tmplt')
+    if not typ in types:
+        err['error'] = True
+        err['typError'] = 'The specified type (' + typ + ') is not valid'
+
+    # Check on 'cry' value, must be 0 or 1
+    if (not cry == 0) and (not cry == 1):
+        err['error'] = True
+        err['cryError'] = 'The specified crypt (' + cry +') is not valid'
+
+    if not err:
+        newItem = {
+            "$set": {
+                "prt": prt,
+                "typ": typ,
+                "val": val,
+                "cry": cry
+            }
+        }
+        print(newItem)
+        res = itm.update_one(q, newItem, False)
+        return {'result': 'record updated'}
+    else:
+        return err
+
 # Read Item
 def ritm(id, prt, typ, val):
     db = dbc()
