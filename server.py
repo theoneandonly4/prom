@@ -99,7 +99,7 @@ class Handler(BaseHTTPRequestHandler):
 
 #TODO Define server initialiZation - creation of cfg with parent 0, templates for orgzt, prson, systm and objct. And version if it does not exist.
 
-init.checks()
+status = init.checks()
 
 server = HTTPServer((hostName, hostPort), Handler)
 print(time.asctime(), "Server Starts - %s:%s" % (hostName, hostPort))

@@ -6,7 +6,7 @@
 import pymongo
 import urllib
 import datetime
-from bson.objectid import ObjectId
+from bson import ObjectId
 
 # Database connection
 def dbc():
@@ -67,12 +67,9 @@ def uitm(id, prt, typ, val, cry, source):
     q = {}
     if (id != '*'):
         q['_id'] = id
-    if (prt != '*'):
-        q['prt'] = prt
-    if (typ != '*'):
-        q['typ'] = typ
-    if (val != '*'):
-        q['val'] = val
+    else:
+        err['error'] = True
+        err['prtError'] = 'Please provide an id'
 
     print(q)
     # CHeck if the provided id exists
