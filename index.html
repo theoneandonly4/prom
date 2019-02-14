@@ -18,26 +18,31 @@ Changed 20190121
 
 <body>
 
-  <div id="topbar">
-    <span> <a href="/">Prometeus</a> </span>
-    <span id="status"></span>
-    <span id="logout" type="button" onclick="logout()" style="display: none">Logout</span>
-   </div>
 
    <div id="main">
+     <div id="topbar">
+       <span> <a href="/">Prometeus</a> </span>
+       <span id="status"></span>
+       <span id="logout" type="button" onclick="logout()" style="display: none">Logout</span>
+     </div>
+
+    <div id="input">
+      <span id='inputText'></span>
+      <input id="input" type="text" name="input" placeholder="Your answer here"><span id='inputError'><br />
+    </div>
 
     <div id="login" style="display: none">
-      <input id="prson" type="text" name="prson" placeholder="Person Name"><span id=userError><br />
-      <input id="pass" type="password" name="pass" placeholder="Password"><span id=passError><br />
+      <input id="prson" type="text" name="prson" placeholder="Person Name"><span id='userError'><br />
+      <input id="pass" type="password" name="pass" placeholder="Password"><span id='passError'><br />
       <button type="button" onclick="signin()">Sign In</button>
     </div>
 
-    <div id="newItem">
+    <div id="newItem" style="display: none">
 
       <button id="test" type="button" onclick="ritm('*', 0, 'tmplt', '*')">test</button>
-      <input id="type" type="text" name="type" placeholder="Type"><span id=typeError><br />
-      <input id="value" type="text" name="value" placeholder="Value"><span id=valueError><br />
-      <input id="crypt" type="checkbox" name="crypt" placeholder="User Name"><span id=userError><br />
+      <input id="type" type="text" name="type" placeholder="Type"><span id='typeError'><br />
+      <input id="value" type="text" name="value" placeholder="Value"><span id='valueError'><br />
+      <input id="crypt" type="checkbox" name="crypt" placeholder="User Name"><span id='userError'><br />
     </div>
 
      <div id="content">
@@ -49,6 +54,7 @@ Changed 20190121
 <script src="./lib/checkFunctions.js" charset="utf-8"></script>
 <script src="./lib/cookies.js" charset="utf-8"></script>
 <script src="./lib/crypt.js" charset="utf-8"></script>
+<script src="./lib/key.js" charset="utf-8"></script>
 <script src="./lib/page.js" charset="utf-8"></script>
 <script src="./lib/prom.js" charset="utf-8"></script>
 </body>

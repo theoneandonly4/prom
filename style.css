@@ -1,5 +1,6 @@
 body {
   position: relative;
+  background-color: black;
 }
 #main {
   position: absolute;
