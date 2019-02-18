@@ -4,7 +4,7 @@
 <!-- Prometeus HTML Page
 By Pierre-Etienne ALBINET
 Started 20190117
-Changed 20190121
+Changed 20190218
 -->
 
 <head profile="http://www.w3.org/2005/10/profile">
@@ -18,17 +18,17 @@ Changed 20190121
 
 <body>
 
+  <div id="topbar">
+    <span> <a href="/">Prometeus</a> </span>
+    <span id="status"></span>
+    <span id="logout" type="button" onclick="logout()" style="display: none">Logout</span>
+  </div>
 
    <div id="main">
-     <div id="topbar">
-       <span> <a href="/">Prometeus</a> </span>
-       <span id="status"></span>
-       <span id="logout" type="button" onclick="logout()" style="display: none">Logout</span>
-     </div>
 
-    <div id="input">
+    <div id="in">
       <span id='inputText'></span>
-      <input id="input" type="text" name="input" placeholder="Your answer here"><span id='inputError'><br />
+      <input id="input" type="text" name="input" placeholder="Your answer here" onkeyup="inputKey(event)"><span id='inputError'><br />
     </div>
 
     <div id="login" style="display: none">
@@ -39,7 +39,6 @@ Changed 20190121
 
     <div id="newItem" style="display: none">
 
-      <button id="test" type="button" onclick="ritm('*', 0, 'tmplt', '*')">test</button>
       <input id="type" type="text" name="type" placeholder="Type"><span id='typeError'><br />
       <input id="value" type="text" name="value" placeholder="Value"><span id='valueError'><br />
       <input id="crypt" type="checkbox" name="crypt" placeholder="User Name"><span id='userError'><br />
@@ -50,13 +49,14 @@ Changed 20190121
 
    </div>
 
-<script src="./lib/api.js" charset="utf-8"></script>
+<script src="./lib/api.js"            charset="utf-8"></script>
 <script src="./lib/checkFunctions.js" charset="utf-8"></script>
-<script src="./lib/cookies.js" charset="utf-8"></script>
-<script src="./lib/crypt.js" charset="utf-8"></script>
-<script src="./lib/key.js" charset="utf-8"></script>
-<script src="./lib/page.js" charset="utf-8"></script>
-<script src="./lib/prom.js" charset="utf-8"></script>
+<script src="./lib/cookies.js"        charset="utf-8"></script>
+<script src="./lib/convert.js"        charset="utf-8"></script>
+<script src="./lib/crypt.js"          charset="utf-8"></script>
+<script src="./lib/key.js"            charset="utf-8"></script>
+<script src="./lib/page.js"           charset="utf-8"></script>
+<script src="./lib/prom.js"           charset="utf-8"></script>
 </body>
 
 </html>

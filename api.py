@@ -19,14 +19,15 @@ def citm(prt, typ, val, cry, source):
     db = dbc()
     itm = db.itm
     err = {}
+    err['error'] = False
 
     # Remove htmlspecialchars from all vars, escape other chars '{()}' > Done in server.py
 
     # Check on 'prt' value, must be an existing '_id' in db
     prtItm = ritm(prt, '*', '*', '*')
-    if (not prtItm) and (not prt == 0):
+    if (prtItm[0]['_id'] == 'not found') and (not prt == 0):
         err['error'] = True
-        err['prtError'] = 'The specified Parent item (' + prt + ') does not exist'
+        err['txtError'] = 'The specified Parent item (' + prt + ') does not exist. '
 
     # Check on 'typ' value, must be in a predefined list of values, exclude 'cfg' from list, only created by server
     #TODO change to all values of tmplt with prt = 0 + tmplt, datyp & value
@@ -36,15 +37,22 @@ def citm(prt, typ, val, cry, source):
         types.append('adm')
         types.append('tmplt')
     if not typ in types:
-        err['error'] = True
-        err['typError'] = 'The specified type (' + typ + ') is not valid'
+        if (err['error']):
+            err['txtError'] = err['txtError'] + 'The specified type (' + typ + ') is not valid. '
+        else:
+            err['txtError'] = 'The specified type (' + typ + ') is not valid. '
+            err['error'] = True
 
     # Check on 'cry' value, must be 0 or 1
     if (not cry == 0) and (not cry == 1):
-        err['error'] = True
-        err['cryError'] = 'The specified crypt (' + cry +') is not valid'
-
-    if not err:
+        if (err['error']):
+            err['txtError'] = err['txtError'] + 'The specified crypt indicator (' + cry +') is not valid'
+        else:
+            err['txtError'] = 'The specified crypt (' + cry +') is not valid'
+            err['error'] = True
+    if err:
+        return err
+    else:
         newItem = {
         "prt": prt,
         "typ": typ,
@@ -53,8 +61,6 @@ def citm(prt, typ, val, cry, source):
         }
         res = itm.insert_one(newItem)
         return {'result': format(res.inserted_id)}
-    else:
-        return err
 
 # Update Item
 def uitm(id, prt, typ, val, cry, source):
@@ -100,7 +106,9 @@ def uitm(id, prt, typ, val, cry, source):
         err['error'] = True
         err['cryError'] = 'The specified crypt (' + cry +') is not valid'
 
-    if not err:
+    if err:
+        return err
+    else:
         newItem = {
             "$set": {
                 "prt": prt,
@@ -112,8 +120,6 @@ def uitm(id, prt, typ, val, cry, source):
         print(newItem)
         res = itm.update_one(q, newItem, False)
         return {'result': 'record updated'}
-    else:
-        return err
 
 # Read Item
 def ritm(id, prt, typ, val):

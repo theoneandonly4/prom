@@ -75,7 +75,7 @@ class Handler(BaseHTTPRequestHandler):
             prt = html.escape(data['prt'][0])
             typ = html.escape(data['typ'][0])
             val = html.escape(data['val'][0])
-            cry = html.escape(data['cry'][0])
+            cry = int(html.escape(data['cry'][0]))
             response = json.dumps(api.citm(prt, typ, val, cry, 'client')).encode('utf-8')
             mimetype = 'application/json'
         elif self.path[:5] == '/uitm':
@@ -84,7 +84,7 @@ class Handler(BaseHTTPRequestHandler):
             prt = html.escape(data['prt'][0])
             typ = html.escape(data['typ'][0])
             val = html.escape(data['val'][0])
-            cry = html.escape(data['cry'][0])
+            cry = int(html.escape(data['cry'][0]))
             response = json.dumps(api.uitm(id, prt, typ, val, cry, 'client')).encode('utf-8')
             mimetype = 'application/json'
         else:
