@@ -20,6 +20,9 @@ def citm(prt, typ, val, cry, source):
     itm = db.itm
     err = {}
     err['error'] = False
+    if not prt == 0:
+        print(prt)
+        prt = ObjectId(prt)
 
     # Remove htmlspecialchars from all vars, escape other chars '{()}' > Done in server.py
 
@@ -50,7 +53,10 @@ def citm(prt, typ, val, cry, source):
         else:
             err['txtError'] = 'The specified crypt (' + cry +') is not valid'
             err['error'] = True
-    if err:
+
+    #TODO Add duplicate checks !!!
+
+    if err['error']:
         return err
     else:
         newItem = {
@@ -67,6 +73,9 @@ def uitm(id, prt, typ, val, cry, source):
     db = dbc()
     itm = db.itm
     err = {}
+    id = ObjectId(id)
+    prt = ObjectId(prt)
+
 
     # Remove htmlspecialchars from all vars, escape other chars '{()}' > Done in server.py
 
@@ -78,7 +87,7 @@ def uitm(id, prt, typ, val, cry, source):
         err['prtError'] = 'Please provide an id'
 
     print(q)
-    # CHeck if the provided id exists
+    # Check if the provided id exists
     Itm = ritm(id, '*', '*', '*')
     if (not Itm):
         err['error'] = True
@@ -86,9 +95,9 @@ def uitm(id, prt, typ, val, cry, source):
 
     # Check on 'prt' value, must be an existing '_id' in db
     prtItm = ritm(prt, '*', '*', '*')
-    if (not prtItm) and (not prt == 0):
+    if (prtItm[0]['_id'] == 'not found') and (not prt == 0):
         err['error'] = True
-        err['prtError'] = 'The specified Parent item (' + prt + ') does not exist'
+        err['txtError'] = 'The specified Parent item (' + prt + ') does not exist. '
 
     # Check on 'typ' value, must be in a predefined list of values, exclude 'cfg' from list, only created by server
     #TODO change to all values of tmplt with prt = 0 + tmplt, datyp & value
@@ -98,13 +107,19 @@ def uitm(id, prt, typ, val, cry, source):
         types.append('adm')
         types.append('tmplt')
     if not typ in types:
-        err['error'] = True
-        err['typError'] = 'The specified type (' + typ + ') is not valid'
+        if (err['error']):
+            err['txtError'] = err['txtError'] + 'The specified type (' + typ + ') is not valid. '
+        else:
+            err['txtError'] = 'The specified type (' + typ + ') is not valid. '
+            err['error'] = True
 
     # Check on 'cry' value, must be 0 or 1
     if (not cry == 0) and (not cry == 1):
-        err['error'] = True
-        err['cryError'] = 'The specified crypt (' + cry +') is not valid'
+        if (err['error']):
+            err['txtError'] = err['txtError'] + 'The specified crypt indicator (' + cry +') is not valid'
+        else:
+            err['txtError'] = 'The specified crypt (' + cry +') is not valid'
+            err['error'] = True
 
     if err:
         return err
@@ -130,8 +145,11 @@ def ritm(id, prt, typ, val):
 
     q = {}
     if (id != '*'):
+        id = ObjectId(id)
         q['_id'] = id
     if (prt != '*'):
+        if (prt != 0):
+            prt = ObjectId(prt)
         q['prt'] = prt
     if (typ != '*'):
         q['typ'] = typ
@@ -155,6 +173,7 @@ def ritm(id, prt, typ, val):
 def ditm(id, prt, typ, val):
     db = dbc()
     itm = db.itm
+    id = ObjectId(id)
 
     # Remove htmlspecialchars from all vars, escape other chars '{()}'
 

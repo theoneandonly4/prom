@@ -26,10 +26,16 @@ Changed 20190218
 
    <div id="main">
 
-    <div id="in">
-      <span id='inputText'></span>
+    <div id="in" style="display: none">
+      <span id="inputText"></span>
       <input id="input" type="text" name="input" placeholder="Your answer here" onkeyup="inputKey(event)"><span id='inputError'><br />
     </div>
+    <div id="choice" style="display: none">
+      <span id="choiceText"></span>
+      <button id="choice1" type="button" name="choice1" onclick="choice1()"></button>
+      <button id="choice2" type="button" name="choice2" onclick="choice2()"></button>
+    </div>
+
 
     <div id="login" style="display: none">
       <input id="prson" type="text" name="prson" placeholder="Person Name"><span id='userError'><br />
