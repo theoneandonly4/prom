@@ -21,7 +21,6 @@ def citm(prt, typ, val, cry, source):
     err = {}
     err['error'] = False
     if not prt == 0:
-        print(prt)
         prt = ObjectId(prt)
 
     # Remove htmlspecialchars from all vars, escape other chars '{()}' > Done in server.py
