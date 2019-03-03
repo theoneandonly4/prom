@@ -20,6 +20,9 @@ Changed 20190218
 
   <div id="topbar">
     <span> <a href="/">Prometeus</a> </span>
+    <span id="userbar" style="display: none">
+       - <span id="user"></span><img id="secured" src="./src/img/secure.png" alt="secured" style="display: none">
+    </span>
     <span id="status"></span>
     <span id="logout" type="button" onclick="logout()" style="display: none">Logout</span>
   </div>
@@ -37,11 +40,11 @@ Changed 20190218
     </div>
 
 
-    <div id="login" style="display: none">
+    <!-- <div id="login" style="display: none">
       <input id="prson" type="text" name="prson" placeholder="Person Name"><span id='userError'><br />
       <input id="pass" type="password" name="pass" placeholder="Password"><span id='passError'><br />
       <button type="button" onclick="signin()">Sign In</button>
-    </div>
+    </div> -->
 
     <div id="newItem" style="display: none">
 
