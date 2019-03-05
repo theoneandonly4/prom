@@ -1,1 +1,71 @@
-> Redo crypt.js to include the iv in the encrypted data.
+> Create passcode logic on server server side
+  > Prevent cPasscode values from being fetched by api client
+  > Implement logic to compare
+
+> Implement api security with an inclusive logic
+  > Client API can only create / update 
+
+> Shamelessly copy functionalities from Basecamp
+Can I prevent our clients from seeing unfinished work?
+Can I reply to Basecamp messages via email?
+Can I link up Google Docs in Basecamp?
+Can I see everything I need to do on a single screen?
+Can I see everything that’s overdue on a single screen?
+Can I use Basecamp even if some of my team prefers just to use email?
+Can I see all the work that was completed on any given day?
+Can I set up projects that only some of my team can see?
+Can I see an entire conversion on a single page?
+Can I see everything that’s happened across multiple projects in one place?
+Can I @mention someone so they’re notified about something?
+Can I see all the work someone’s done over a long period of time?
+Can I see everything that’s assigned to someone on a single page?
+Can I see exactly who worked on what today? Yesterday? Last week?
+Can I tell who’s working on which projects?
+Can I reference an entire conversation from a year ago?
+Can I see my assignments ordered by due date?
+Can I see every previous reply about something before I reply?
+Can I assign tasks to multiple people at once?
+Can I attach files, documents, and notes to to-do items?
+Can I keep all the discussion about a to-do attached to that to-do?
+Can I follow-up directly with someone without anyone else knowing?
+Can our clients respond to our questions via email?
+Can our clients see a record of everything we’ve asked them?
+Can our clients officially approve work using Basecamp?
+Can I draft a document on my desktop and finish it on my phone?
+Can Basecamp tell me when someone completed a to-do?
+Can Basecamp help me get a client to approve a design?
+Can Basecamp help me hold my team accountable for deadlines?
+Can Basecamp email me a single summary of yesterday's activity?
+Can Basecamp notify me when someone mentions my name?
+Can Basecamp tell me when someone wrote up what they worked on today?
+Can Basecamp automatically ask people what they worked on today?
+Can Basecamp automatically ask any question on a recurring basis?
+Can Basecamp automatically mute my notifications on the weekends?
+Can I replace Monday morning stand-up meetings with Basecamp?
+Can I use Basecamp with people who don’t ever want to log in?
+Can I use Basecamp with external partners like contractors?
+Can we export all our data any time we want?
+Can we replace a handful of separate products with Basecamp?
+Can we create to-do lists that only our internal team can see?
+Can we get our client’s feedback on the record using Basecamp?
+Can we deliver finished work to our clients via Basecamp?
+Can we set up a private, collaborative space for each team we have?
+Can we discuss a Google doc from within Basecamp?
+Can we write documents without having to use another service?
+Can we separate our internal feedback from our client’s feedback?
+Can we use Basecamp without signing a long-term contract?
+Can we forward-in emails and save them on-the-record in Basecamp?
+Can we make company-wide announcements in Basecamp?
+Can we run a dozen simultanous projects on Basecamp?
+Can we replace our daily stand up meetings with Basecamp?
+Can we organize our files and documents inside folders?
+Can we replace internal email with Basecamp?
+Can we replace Slack or HipChat with Basecamp?
+Can we replace Dropbox or Google Drive with Basecamp?
+Can we track versions of documents with Basecamp?
+Can we send our clients updates through Basecamp?
+Can we view our Basecamp schedule inside Google Calendar? Outlook?
+Does Basecamp have an API?
+Does Basecamp have chat built in?
+Does Basecamp have direct/instant messaging built in?
+Does Basecamp have reports built in?
