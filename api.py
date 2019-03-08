@@ -190,3 +190,39 @@ def ditm(id, prt, typ, val):
         return {'deletedCount': str(res.deleted_count)}
     except IndexError:
         return {'error': 'not found'}
+
+def tree(id, prt, typ, val, lvlup, lvldown):
+    data = []
+    itm = ritm(id, prt, typ, val)
+    data.append(itm[0])
+    if itm[0]['_id'] != 'not found':
+        if lvldown != 0:
+            addData = data
+            for i in range(lvldown):
+                searchData = addData
+                addData = []
+                for i in searchData:
+                    print(i)
+                    addItems = ritm('*', ObjectId(i['_id']), '*', '*')
+                    if addItems[0]['_id'] != 'not found':
+                        for j in addItems:
+                            addData.append(j)
+                for k in addData:
+                    data.append(k)
+        if lvlup != 0:
+            lvl = lvlup
+            goUp = True
+            prtid = itm[0]['prt']
+            while goUp:
+                prtitm = ritm(ObjectId(prtid), '*', '*', '*')
+                if prtitm[0]['_id'] == 'not found' or prtitm[0]['_id'] == 0:
+                    goUp = False
+                else:
+                    prtid = prtitm[0]['prt']
+                    data.append(prtitm[0])
+                    lvl = lvl - 1
+                    if lvl == 0:
+                        goUp = False
+        return data
+    else:
+        return [{'_id': 'not found'}]
