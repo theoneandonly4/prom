@@ -141,7 +141,6 @@ def ritm(id, prt, typ, val):
     itm = db.itm
 
     # Remove htmlspecialchars from all vars, escape other chars '{()}'
-
     q = {}
     if (id != '*'):
         id = ObjectId(id)
@@ -160,7 +159,14 @@ def ritm(id, prt, typ, val):
         for x in res:
             x['_id'] = str(x['_id'])
             if not x['prt'] == 0:
-                x['prt'] = str(x['prt'])
+                if x['typ'] == 'value':
+                    x['prt'] = str(x['prt'])
+                    prt = ritm(ObjectId(x['prt']), '*', 'datyp', '*')
+                    if prt[0]['_id'] == 'not found':
+                        return [{'_id': 'not found'}]
+                    else:
+                        if prt[0]['val'] == 'passcode' or prt[0]['val'] == 'uKey':
+                            x['val'] = 'hidden'
             t.append(x)
         if not t:
             t = [{'_id': 'not found'}]
@@ -202,7 +208,6 @@ def tree(id, prt, typ, val, lvlup, lvldown):
                 searchData = addData
                 addData = []
                 for i in searchData:
-                    print(i)
                     addItems = ritm('*', ObjectId(i['_id']), '*', '*')
                     if addItems[0]['_id'] != 'not found':
                         for j in addItems:
