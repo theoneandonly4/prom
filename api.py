@@ -26,7 +26,7 @@ def citm(prt, typ, val, cry, source):
     # Remove htmlspecialchars from all vars, escape other chars '{()}' > Done in server.py
 
     # Check on 'prt' value, must be an existing '_id' in db
-    prtItm = ritm(prt, '*', '*', '*')
+    prtItm = ritm(prt, '*', '*', '*', 'client')
     if (prtItm[0]['_id'] == 'not found') and (not prt == 0):
         err['error'] = True
         err['txtError'] = 'The specified Parent item (' + prt + ') does not exist. '
@@ -87,13 +87,13 @@ def uitm(id, prt, typ, val, cry, source):
 
     print(q)
     # Check if the provided id exists
-    Itm = ritm(id, '*', '*', '*')
+    Itm = ritm(id, '*', '*', '*', 'client')
     if (not Itm):
         err['error'] = True
         err['prtError'] = 'The specified item (' + prt + ') does not exist'
 
     # Check on 'prt' value, must be an existing '_id' in db
-    prtItm = ritm(prt, '*', '*', '*')
+    prtItm = ritm(prt, '*', '*', '*', 'client')
     if (prtItm[0]['_id'] == 'not found') and (not prt == 0):
         err['error'] = True
         err['txtError'] = 'The specified Parent item (' + prt + ') does not exist. '
@@ -136,7 +136,7 @@ def uitm(id, prt, typ, val, cry, source):
         return {'result': 'record updated'}
 
 # Read Item
-def ritm(id, prt, typ, val):
+def ritm(id, prt, typ, val, source):
     db = dbc()
     itm = db.itm
 
@@ -159,13 +159,13 @@ def ritm(id, prt, typ, val):
         for x in res:
             x['_id'] = str(x['_id'])
             if not x['prt'] == 0:
+                x['prt'] = str(x['prt'])
                 if x['typ'] == 'value':
-                    x['prt'] = str(x['prt'])
-                    prt = ritm(ObjectId(x['prt']), '*', 'datyp', '*')
+                    prt = ritm(x['prt'], '*', 'datyp', '*', 'client')
                     if prt[0]['_id'] == 'not found':
                         return [{'_id': 'not found'}]
                     else:
-                        if prt[0]['val'] == 'passcode' or prt[0]['val'] == 'uKey':
+                        if (prt[0]['val'] == 'passcode' or prt[0]['val'] == 'uKey') and source == 'client':
                             x['val'] = 'hidden'
             t.append(x)
         if not t:
@@ -199,7 +199,7 @@ def ditm(id, prt, typ, val):
 
 def tree(id, prt, typ, val, lvlup, lvldown):
     data = []
-    itm = ritm(id, prt, typ, val)
+    itm = ritm(id, prt, typ, val, 'client')
     data.append(itm[0])
     if itm[0]['_id'] != 'not found':
         if lvldown != 0:
@@ -231,3 +231,25 @@ def tree(id, prt, typ, val, lvlup, lvldown):
         return data
     else:
         return [{'_id': 'not found'}]
+
+def gettoken(id, passcode, source):
+    user = ritm(id, '*', '*', '*', source)
+    if user[0]['_id'] == 'not found':
+        return { 'session': False }
+    else:
+        passCodeId = ritm('*', ObjectId(user[0]['prt']), 'datyp', 'passcode', source)
+        if passCodeId[0]['_id'] == 'not found':
+            return { 'session': False }
+        else:
+            passcodeDB = ritm('*', ObjectId(passCodeId[0]['prt']), 'value', '*', 'server')
+            if passCodeId[0]['_id'] == 'not found':
+                return { 'session': False }
+            else:
+                if passcode == passcodeDB:
+                    # Generate & Store session token
+                    return {
+                        'session': True,
+                        'token': '1fb7e682'
+                    }
+                else:
+                    return { 'session': False }

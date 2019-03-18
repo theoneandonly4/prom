@@ -1,9 +1,9 @@
 > Create passcode logic on server server side
-  > Prevent cPasscode values from being fetched by api client
+  DONE> Prevent cPasscode values from being fetched by api client
   > Implement logic to compare
 
 > Implement api security with an inclusive logic
-  > Client API can only create / update 
+  > Client API can only create / update
 
 > Shamelessly copy functionalities from Basecamp
 Can I prevent our clients from seeing unfinished work?

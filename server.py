@@ -58,7 +58,7 @@ class Handler(BaseHTTPRequestHandler):
                 prt = 0
             typ = html.escape(data['typ'][0])
             val = html.escape(data['val'][0])
-            response = json.dumps(api.ritm(id, prt, typ, val)).encode('utf-8')
+            response = json.dumps(api.ritm(id, prt, typ, val, 'client')).encode('utf-8')
             mimetype = 'application/json'
         else:
             self.send_error(404)
@@ -86,6 +86,12 @@ class Handler(BaseHTTPRequestHandler):
             val = html.escape(data['val'][0])
             cry = int(html.escape(data['cry'][0]))
             response = json.dumps(api.uitm(id, prt, typ, val, cry, 'client')).encode('utf-8')
+            mimetype = 'application/json'
+        elif self.path[:5] == '/gettoken':
+            data = urllib.parse.parse_qs(self.rfile.read(int(self.headers.get('content-length'))).decode('utf-8'))
+            id = html.escape(data['id'][0])
+            passcode = html.escape(data['passcode'][0])
+            response = json.dumps(api.gettoken(id, passcode, 'client')).encode('utf-8')
             mimetype = 'application/json'
         else:
             self.send_error(404)
