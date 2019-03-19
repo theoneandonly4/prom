@@ -3,6 +3,7 @@
 # Started 20190117
 # Changed 20190121
 
+import os
 import pymongo
 import urllib
 import datetime
@@ -233,19 +234,19 @@ def tree(id, prt, typ, val, lvlup, lvldown):
         return [{'_id': 'not found'}]
 
 def gettoken(id, passcode, source):
-    user = ritm(id, '*', '*', '*', source)
+    user = ritm(ObjectId(id), '*', '*', '*', source)
     if user[0]['_id'] == 'not found':
         return { 'session': False }
     else:
-        passCodeId = ritm('*', ObjectId(user[0]['prt']), 'datyp', 'passcode', source)
+        passCodeId = ritm('*', ObjectId(user[0]['_id']), 'datyp', 'passcode', source)
         if passCodeId[0]['_id'] == 'not found':
             return { 'session': False }
         else:
-            passcodeDB = ritm('*', ObjectId(passCodeId[0]['prt']), 'value', '*', 'server')
+            passcodeDB = ritm('*', ObjectId(passCodeId[0]['_id']), 'value', '*', 'server')
             if passCodeId[0]['_id'] == 'not found':
                 return { 'session': False }
             else:
-                if passcode == passcodeDB:
+                if passcode == passcodeDB[0]['val']:
                     # Generate & Store session token
                     return {
                         'session': True,
