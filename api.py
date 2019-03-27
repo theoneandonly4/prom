@@ -8,6 +8,9 @@ import pymongo
 import urllib
 import datetime
 from bson import ObjectId
+import utils
+
+securedFields = ['passcode', 'uKey', 'session']
 
 # Database connection
 def dbc():
@@ -67,6 +70,12 @@ def citm(prt, typ, val, cry, source):
         }
         res = itm.insert_one(newItem)
         return {'result': format(res.inserted_id)}
+
+# Create datyp + value item in 1 function
+def citmval(prt, datyp, value, cry, source):
+    itm1 = citm(prt,'datyp', datyp, cry, source)
+    itm2 = citm(itm1['result'], 'value', value, cry, source)
+    return {'itm': itm1['result'], 'value': itm2['result']}
 
 # Update Item
 def uitm(id, prt, typ, val, cry, source):
@@ -166,7 +175,7 @@ def ritm(id, prt, typ, val, source):
                     if prt[0]['_id'] == 'not found':
                         return [{'_id': 'not found'}]
                     else:
-                        if (prt[0]['val'] == 'passcode' or prt[0]['val'] == 'uKey') and source == 'client':
+                        if prt[0]['val'] in securedFields and source == 'client':
                             x['val'] = 'hidden'
             t.append(x)
         if not t:
@@ -209,7 +218,7 @@ def tree(id, prt, typ, val, lvlup, lvldown):
                 searchData = addData
                 addData = []
                 for i in searchData:
-                    addItems = ritm('*', ObjectId(i['_id']), '*', '*')
+                    addItems = ritm('*', ObjectId(i['_id']), '*', '*', 'client')
                     if addItems[0]['_id'] != 'not found':
                         for j in addItems:
                             addData.append(j)
@@ -248,9 +257,12 @@ def gettoken(id, passcode, source):
             else:
                 if passcode == passcodeDB[0]['val']:
                     # Generate & Store session token
+                    token = utils.randomHex(20)
+                    objts = citmval(user[0]['_id'], 'session', token, 0, source)
                     return {
                         'session': True,
-                        'token': '1fb7e682'
+                        'token': token,
+                        'objects': objts
                     }
                 else:
                     return { 'session': False }
